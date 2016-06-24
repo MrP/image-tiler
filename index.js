@@ -18,19 +18,12 @@ function tileLevel(inPath, outPath, zoom, tileSize, pattern) {
     }
     return mkdirp(outPath + path.sep + patternedFilenameWithoutTheFilename)
     .then(()=>{
-        return new Promise(function (resolve, reject) {
-            try {
-                var command = 'convert ' + inPath +
-                    ' -crop ' + tileSize + 'x' + tileSize +
-                    ' -set filename:tile "' + patternedFilename + '"' +
-                    ' +repage +adjoin' +
-                    ' "' + outPath + '/%[filename:tile]' + dotExtension + '"' ;
-                execSync(command);
-                resolve();
-            } catch (e) {
-                reject(e);
-            }
-        });
+        var command = 'convert ' + inPath +
+            ' -crop ' + tileSize + 'x' + tileSize +
+            ' -set filename:tile "' + patternedFilename + '"' +
+            ' +repage +adjoin' +
+            ' "' + outPath + '/%[filename:tile]' + dotExtension + '"' ;
+        execSync(command);
     });
 }
 
