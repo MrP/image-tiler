@@ -13,8 +13,9 @@ function tileLevel(inPath, outPath, zoom, tileSize, pattern) {
         .replace(/\{y\}/, '%[fx:page.y/' + tileSize + ']')
         .replace(/\.[^.]+$/, '');
     var patternedFilenameWithoutTheFilename = '';
-    if (patternedFilename.indexOf(path.sep) > 0) {
-        patternedFilenameWithoutTheFilename = patternedFilename.replace(new RegExp(path.sep+'[^'+path.sep+']*$'), '');
+    if (pattern.indexOf(path.sep) > 0) {
+        patternedFilenameWithoutTheFilename = pattern.replace(new RegExp(path.sep+'[^'+path.sep+']*$'), '')
+        .replace(/\{z\}/, '' + zoom);
     }
     return mkdirp(outPath + path.sep + patternedFilenameWithoutTheFilename)
     .then(()=>{
