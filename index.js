@@ -6,7 +6,7 @@ var rimraf = require('rimraf-promise');
 var fs = require('fs');
 var path = require('path');
 
-function tileLevel(inPath, outPath, zoom, tileSize, pattern) {
+function tileLevel(inPath, outPath, zoom, tileSize, pattern, quality) {
     var dotExtension = pattern.replace(/.*(\.[^.]+)$/, '$1');
     var patternedFilename = pattern.replace(/\{z\}/, '' + zoom)
         .replace(/\{x\}/, '%[fx:page.x/' + tileSize + ']')
@@ -22,7 +22,7 @@ function tileLevel(inPath, outPath, zoom, tileSize, pattern) {
         var command = 'convert ' + inPath +
             ' -crop ' + tileSize + 'x' + tileSize +
             ' -set filename:tile "' + patternedFilename + '"' +
-            ' +repage +adjoin' +
+            ' -quality ' + quality + ' +repage +adjoin' +
             ' "' + outPath + '/%[filename:tile]' + dotExtension + '"' ;
         execSync(command);
     });
@@ -33,11 +33,11 @@ function imageSmallerThanTile(path, tileSize) {
     return size.height < tileSize && size.width < tileSize;
 }
 
-function tileRec(inPath, outPath, zoom, tileSize, tempDir, pattern, zoomToDisplay, zeroZoomOut) {
+function tileRec(inPath, outPath, zoom, tileSize, tempDir, pattern, zoomToDisplay, zeroZoomOut, quality) {
     var inPathMpc = tempDir + '/temp_level_' + zoom + '.mpc';
     var inPathCache = tempDir + '/temp_level_' + zoom + '.cache';
     execSync('convert ' + inPath + ' ' + inPathMpc);
-    return tileLevel(inPathMpc, outPath, zoomToDisplay, tileSize, pattern)
+    return tileLevel(inPathMpc, outPath, zoomToDisplay, tileSize, pattern, quality)
         .then(function () {
             if (!imageSmallerThanTile(inPath, tileSize)) {
                 var newZoom = zoom + 1;
@@ -46,10 +46,10 @@ function tileRec(inPath, outPath, zoom, tileSize, tempDir, pattern, zoomToDispla
                     newZoomToDisplay = zoomToDisplay - 1;
                 }
                 var newInPath = tempDir + '/temp_level_' + zoom + '.png';
-                execSync('convert ' + inPathMpc + ' -resize 50% '+ newInPath);
+                execSync('convert ' + inPathMpc + ' -resize 50% -quality ' + quality + ' ' + newInPath);
                 fs.unlinkSync(inPathMpc);
                 fs.unlinkSync(inPathCache);
-                return tileRec(newInPath, outPath, newZoom, tileSize, tempDir, pattern, newZoomToDisplay, zeroZoomOut);
+                return tileRec(newInPath, outPath, newZoom, tileSize, tempDir, pattern, newZoomToDisplay, zeroZoomOut, quality);
             } else {
                 fs.unlinkSync(inPathMpc);
                 fs.unlinkSync(inPathCache);
@@ -64,6 +64,7 @@ module.exports.tile = function (inPath, outPath, pattern, options) {
     var tempDir = tmpDir + '/image-tiler_' + process.pid;
     var zoom = 0;
     var zoomToDisplay = 0;
+    var quality = options.quality || 100;
     if (!options.zeroZoomOut) {
         var size = sizeOf(inPath);
         var halvingsWidth = Math.log2(Math.ceil(size.width / tileSize));
@@ -71,6 +72,6 @@ module.exports.tile = function (inPath, outPath, pattern, options) {
         zoomToDisplay = Math.max(halvingsWidth, halvingsheight);
     }
     return mkdirp(tempDir)
-        .then(()=>tileRec(inPath, outPath, zoom, tileSize, tempDir, pattern, zoomToDisplay, options.zeroZoomOut))
+        .then(()=>tileRec(inPath, outPath, zoom, tileSize, tempDir, pattern, zoomToDisplay, options.zeroZoomOut, quality))
         .then(()=>rimraf(tempDir));
 };

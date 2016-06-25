@@ -46,4 +46,6 @@ The `tile` function accepts the following parameters:
 
 `options.tileSize` defaults to 256
 
+`options.quality` defaults to 100
+
 `options.zeroZoomOut` false by default.  Controls whether zoom levels go from 0 (one tile, all zoomed out) to N (original scale) or the opposite (default).
