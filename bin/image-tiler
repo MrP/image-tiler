@@ -1,9 +1,9 @@
 #!/usr/bin/env node
-var argv = require('minimist')(process.argv.slice(2), {boolean: true});
+var argv = require('minimist')(process.argv.slice(2), {boolean: ['invertZoom']});
 var tile = require('../index.js').tile;
 
 tile(argv._[0], argv._[1], argv._[2], {
     tileSize: argv.tileSize,
     tmpDir: argv.tmpDir,
-    zeroZoomOut: argv.zeroZoomOut
+    invertZoom: argv.invertZoom
 });

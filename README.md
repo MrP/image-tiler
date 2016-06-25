@@ -48,4 +48,4 @@ The `tile` function accepts the following parameters:
 
 `options.quality` defaults to 100
 
-`options.zeroZoomOut` false by default.  Controls whether zoom levels go from 0 (one tile, all zoomed out) to N (original scale) or the opposite (default).
+`options.invertZoom` false by default.  If true, zoom levels will go from 0 (original image scale) to N (one tile, all zoomed out).  Which is the opposite of the default behavior.

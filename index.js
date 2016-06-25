@@ -33,7 +33,7 @@ function imageSmallerThanTile(path, tileSize) {
     return size.height < tileSize && size.width < tileSize;
 }
 
-function tileRec(inPath, outPath, zoom, tileSize, tempDir, pattern, zoomToDisplay, zeroZoomOut, quality) {
+function tileRec(inPath, outPath, zoom, tileSize, tempDir, pattern, zoomToDisplay, invertZoom, quality) {
     var inPathMpc = tempDir + '/temp_level_' + zoom + '.mpc';
     var inPathCache = tempDir + '/temp_level_' + zoom + '.cache';
     execSync('convert ' + inPath + ' ' + inPathMpc);
@@ -42,14 +42,14 @@ function tileRec(inPath, outPath, zoom, tileSize, tempDir, pattern, zoomToDispla
             if (!imageSmallerThanTile(inPath, tileSize)) {
                 var newZoom = zoom + 1;
                 var newZoomToDisplay = zoomToDisplay + 1;
-                if (!zeroZoomOut) {
+                if (!invertZoom) {
                     newZoomToDisplay = zoomToDisplay - 1;
                 }
                 var newInPath = tempDir + '/temp_level_' + zoom + '.png';
                 execSync('convert ' + inPathMpc + ' -resize 50% -quality ' + quality + ' ' + newInPath);
                 fs.unlinkSync(inPathMpc);
                 fs.unlinkSync(inPathCache);
-                return tileRec(newInPath, outPath, newZoom, tileSize, tempDir, pattern, newZoomToDisplay, zeroZoomOut, quality);
+                return tileRec(newInPath, outPath, newZoom, tileSize, tempDir, pattern, newZoomToDisplay, invertZoom, quality);
             } else {
                 fs.unlinkSync(inPathMpc);
                 fs.unlinkSync(inPathCache);
@@ -65,13 +65,13 @@ module.exports.tile = function (inPath, outPath, pattern, options) {
     var zoom = 0;
     var zoomToDisplay = 0;
     var quality = options.quality || 100;
-    if (!options.zeroZoomOut) {
+    if (!options.invertZoom) {
         var size = sizeOf(inPath);
-        var halvingsWidth = Math.log2(Math.ceil(size.width / tileSize));
-        var halvingsheight = Math.log2(Math.ceil(size.height / tileSize));
+        var halvingsWidth = Math.ceil(Math.log2(Math.ceil(size.width / tileSize)));
+        var halvingsheight = Math.ceil(Math.log2(Math.ceil(size.height / tileSize)));
         zoomToDisplay = Math.max(halvingsWidth, halvingsheight);
     }
     return mkdirp(tempDir)
-        .then(()=>tileRec(inPath, outPath, zoom, tileSize, tempDir, pattern, zoomToDisplay, options.zeroZoomOut, quality))
+        .then(()=>tileRec(inPath, outPath, zoom, tileSize, tempDir, pattern, zoomToDisplay, options.invertZoom, quality))
         .then(()=>rimraf(tempDir));
 };
