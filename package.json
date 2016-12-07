@@ -35,6 +35,6 @@
     "mkdirp": "^0.5.1",
     "mkdirp-promise": "^2.0.0",
     "rimraf": "^2.5.2",
-    "rimraf-promise": "^2.0.0"
+    "rmrf": "^1.0.2"
   }
 }

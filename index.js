@@ -2,7 +2,7 @@
 var execSync = require('child_process').execSync;
 var sizeOf = require('image-size');
 var mkdirp = require('mkdirp-promise');
-var rimraf = require('rimraf-promise');
+var rimraf = require('rmrf');
 var fs = require('fs');
 var path = require('path');
 
