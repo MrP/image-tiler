@@ -1,6 +1,6 @@
 {
   "name": "image-tiler",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Create zoom tile pyramids from a large image",
   "main": "index.js",
   "scripts": {
