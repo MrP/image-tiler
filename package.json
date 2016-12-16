@@ -34,7 +34,7 @@
     "image-size": "^0.5.0",
     "minimist": "^1.2.0",
     "mkdirp": "^0.5.1",
-    "mkdirp-promise": "^4.0.1",
+    "mkdirp-promise": "^5.0.0",
     "rimraf": "^2.5.2",
     "rmfr": "^1.0.1"
   }
