@@ -30,11 +30,11 @@
     "node-image-compare-promise": "^0.1.0"
   },
   "dependencies": {
-    "image-size": "^0.5.0",
+    "image-size": "^0.5.1",
     "minimist": "^1.2.0",
     "mkdirp": "^0.5.1",
-    "mkdirp-promise": "^5.0.0",
+    "mkdirp-promise": "^5.0.1",
     "rimraf": "^2.5.2",
-    "rmfr": "^1.0.1"
+    "rmfr": "^1.0.2"
   }
 }
