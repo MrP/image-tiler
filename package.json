@@ -27,7 +27,8 @@
     "grunt": "^1.0.1",
     "grunt-jasmine-nodejs": "^1.5.3",
     "load-grunt-tasks": "^3.5.0",
-    "node-image-compare-promise": "^0.1.0"
+    "node-image-compare-promise": "^0.1.0",
+    "rimraf": "^2.6.1"
   },
   "dependencies": {
     "image-size": "^0.5.1",
