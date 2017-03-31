@@ -1,4 +1,4 @@
-/*global jasmine*/
+/*global jasmine, expect*/
 var fs = require('fs');
 var tile = require('../index.js').tile;
 var rimraf = require('rimraf');
@@ -83,6 +83,19 @@ describe('tile', function () {
             .then(()=>expectImagesToBeTheSame(tempDir + '/tile_2_1_1.png', 'spec/expected/big_image/tile_2_1_1.png'))
             .then(()=>expectImagesToBeTheSame(tempDir + '/tile_3_2_3.png', 'spec/expected/big_image/tile_3_2_3.png'))
             .then(()=>expectImagesToBeTheSame(tempDir + '/tile_4_13_11.png', 'spec/expected/big_image/tile_4_13_11.png'))
+            .then(done)
+            .catch(done.fail);
+        });
+    });
+    describe('when tiling an image that is 1024x1024 pixels', function () {
+        it('should not produce a bogus -1 zomm image', function (done) {
+            tile('spec/1024.png', tempDir, 'tile_{z}_{x}_{y}.png', {invertZoom: false})
+            .then(()=>expect(fs.existsSync(tempDir + '/tile_-1_0_0.png')).toBe(false))
+            .then(()=>expectImagesToBeTheSame(tempDir + '/tile_0_0_0.png', 'spec/expected/1024/tile_0_0_0.png'))
+            .then(()=>expectImagesToBeTheSame(tempDir + '/tile_1_0_1.png', 'spec/expected/1024/tile_1_0_1.png'))
+            .then(()=>expectImagesToBeTheSame(tempDir + '/tile_2_2_2.png', 'spec/expected/1024/tile_2_2_2.png'))
+            .then(()=>expectImagesToBeTheSame(tempDir + '/tile_2_3_2.png', 'spec/expected/1024/tile_2_3_2.png'))
+            .then(()=>expectImagesToBeTheSame(tempDir + '/tile_2_3_3.png', 'spec/expected/1024/tile_2_3_3.png'))
             .then(done)
             .catch(done.fail);
         });

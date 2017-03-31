@@ -28,9 +28,9 @@ function tileLevel(inPath, outPath, zoom, tileSize, pattern, quality) {
     });
 }
 
-function imageSmallerThanTile(path, tileSize) {
+function imageBiggerThanTile(path, tileSize) {
     var size = sizeOf(path);
-    return size.height < tileSize && size.width < tileSize;
+    return size.height > tileSize || size.width > tileSize;
 }
 
 function tileRec(inPath, outPath, zoom, tileSize, tempDir, pattern, zoomToDisplay, invertZoom, quality) {
@@ -39,7 +39,7 @@ function tileRec(inPath, outPath, zoom, tileSize, tempDir, pattern, zoomToDispla
     execSync('convert ' + inPath + ' ' + inPathMpc);
     return tileLevel(inPathMpc, outPath, zoomToDisplay, tileSize, pattern, quality)
         .then(function () {
-            if (!imageSmallerThanTile(inPath, tileSize)) {
+            if (imageBiggerThanTile(inPath, tileSize)) {
                 var newZoom = zoom + 1;
                 var newZoomToDisplay = zoomToDisplay + 1;
                 if (!invertZoom) {

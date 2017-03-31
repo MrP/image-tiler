@@ -21,7 +21,6 @@ describe('image-tiler cli', function () {
         });
     });
 
-
     afterEach(function () {
         rimraf.sync(tempDir);
     });
