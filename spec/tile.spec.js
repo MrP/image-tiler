@@ -88,7 +88,7 @@ describe('tile', function () {
         });
     });
     describe('when tiling an image that is 1024x1024 pixels', function () {
-        it('should not produce a bogus -1 zomm image', function (done) {
+        it('should not produce a bogus -1 zoom image', function (done) {
             tile('spec/1024.png', tempDir, 'tile_{z}_{x}_{y}.png', {invertZoom: false})
             .then(()=>expect(fs.existsSync(tempDir + '/tile_-1_0_0.png')).toBe(false))
             .then(()=>expectImagesToBeTheSame(tempDir + '/tile_0_0_0.png', 'spec/expected/1024/tile_0_0_0.png'))
