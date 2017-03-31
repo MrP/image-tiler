@@ -94,7 +94,7 @@ describe('tile', function () {
             .then(()=>expectImagesToBeTheSame(tempDir + '/tile_0_0_0.png', 'spec/expected/1024/tile_0_0_0.png'))
             // .then(()=>expectImagesToBeTheSame(tempDir + '/tile_1_0_1.png', 'spec/expected/1024/tile_1_0_1.png'))
             .then(()=>expectImagesToBeTheSame(tempDir + '/tile_2_2_2.png', 'spec/expected/1024/tile_2_2_2.png'))
-            // .then(()=>expectImagesToBeTheSame(tempDir + '/tile_2_3_2.png', 'spec/expected/1024/tile_2_3_2.png'))
+            .then(()=>expectImagesToBeTheSame(tempDir + '/tile_2_3_2.png', 'spec/expected/1024/tile_2_3_2.png'))
             // .then(()=>expectImagesToBeTheSame(tempDir + '/tile_2_3_3.png', 'spec/expected/1024/tile_2_3_3.png'))
             .then(done)
             .catch(done.fail);
