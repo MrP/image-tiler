@@ -4,8 +4,7 @@
   "description": "Create zoom tile pyramids from a large image",
   "main": "index.js",
   "scripts": {
-    "test": "jasmine",
-    "install": "echo \"Don't forget to install imagemagick:\nsudo apt-get update\nsudo apt-get install imagemagick\""
+    "test": "jasmine"
   },
   "repository": {
     "type": "git",
@@ -24,8 +23,8 @@
   },
   "homepage": "https://github.com/MrP/image-tiler#readme",
   "devDependencies": {
-    "jasmine": "^2.5.3",
-    "node-image-compare-promise": "^0.1.0",
+    "jasmine": "^2.6.0",
+    "node-image-compare-promise": "^0.1.2",
     "rimraf": "^2.6.1"
   },
   "dependencies": {
