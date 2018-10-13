@@ -2,7 +2,7 @@
 var execSync = require('child_process').execSync;
 var sizeOf = require('image-size');
 var mkdirp = require('mkdirp-promise');
-var rmfr = require('rmfr');
+var rimraf = require('rimraf-then');
 var fs = require('fs');
 var path = require('path');
 
@@ -73,5 +73,5 @@ module.exports.tile = function (inPath, outPath, pattern, options) {
     }
     return mkdirp(tempDir)
         .then(()=>tileRec(inPath, outPath, zoom, tileSize, tempDir, pattern, zoomToDisplay, options.invertZoom, quality))
-        .then(()=>rmfr(tempDir));
+        .then(()=>rimraf(tempDir));
 };
