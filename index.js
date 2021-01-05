@@ -1,5 +1,5 @@
 'use strict';
-var execSync = require('child_process').execSync;
+var execFileSync = require('child_process').execFileSync;
 var sizeOf = require('image-size');
 var mkdirp = require('mkdirp-promise');
 var rimraf = require('rimraf-then');
@@ -14,18 +14,18 @@ function tileLevel(inPath, outPath, zoom, tileSize, pattern, quality) {
         .replace(/\.[^.]+$/, '');
     var patternedFilenameWithoutTheFilename = '';
     if (pattern.indexOf(path.sep) > 0) {
-        patternedFilenameWithoutTheFilename = pattern.replace(new RegExp(path.sep+'[^'+path.sep+']*$'), '')
-        .replace(/\{z\}/, '' + zoom);
+        patternedFilenameWithoutTheFilename = pattern.replace(new RegExp(path.sep + '[^' + path.sep + ']*$'), '')
+            .replace(/\{z\}/, '' + zoom);
     }
     return mkdirp(outPath + path.sep + patternedFilenameWithoutTheFilename)
-    .then(()=>{
-        var command = 'convert ' + inPath +
-            ' -crop ' + tileSize + 'x' + tileSize +
-            ' -set filename:tile "' + patternedFilename + '"' +
-            ' -quality ' + quality + ' +repage +adjoin' +
-            ' "' + outPath + '/%[filename:tile]' + dotExtension + '"' ;
-        execSync(command);
-    });
+        .then(() => {
+            var args = [inPath,
+                '-crop', tileSize + 'x' + tileSize,
+                '-set', 'filename:tile', patternedFilename,
+                '-quality', quality, '+repage', '+adjoin',
+                outPath + '/%[filename:tile]' + dotExtension];
+            execFileSync('convert', args);
+        });
 }
 
 function imageBiggerThanTile(path, tileSize) {
@@ -36,7 +36,7 @@ function imageBiggerThanTile(path, tileSize) {
 function tileRec(inPath, outPath, zoom, tileSize, tempDir, pattern, zoomToDisplay, invertZoom, quality) {
     var inPathMpc = tempDir + '/temp_level_' + zoom + '.mpc';
     var inPathCache = tempDir + '/temp_level_' + zoom + '.cache';
-    execSync('convert ' + inPath + ' ' + inPathMpc);
+    execFileSync('convert', [inPath, inPathMpc]);
     return tileLevel(inPathMpc, outPath, zoomToDisplay, tileSize, pattern, quality)
         .then(function () {
             if (imageBiggerThanTile(inPath, tileSize)) {
@@ -46,7 +46,7 @@ function tileRec(inPath, outPath, zoom, tileSize, tempDir, pattern, zoomToDispla
                     newZoomToDisplay = zoomToDisplay - 1;
                 }
                 var newInPath = tempDir + '/temp_level_' + zoom + '.png';
-                execSync('convert ' + inPathMpc + ' -resize 50% -quality ' + quality + ' ' + newInPath);
+                execFileSync('convert', [inPathMpc, '-resize', '50%', '-quality', quality, newInPath]);
                 fs.unlinkSync(inPathMpc);
                 fs.unlinkSync(inPathCache);
                 return tileRec(newInPath, outPath, newZoom, tileSize, tempDir, pattern, newZoomToDisplay, invertZoom, quality);
@@ -72,6 +72,6 @@ module.exports.tile = function (inPath, outPath, pattern, options) {
         zoomToDisplay = Math.max(halvingsWidth, halvingsheight);
     }
     return mkdirp(tempDir)
-        .then(()=>tileRec(inPath, outPath, zoom, tileSize, tempDir, pattern, zoomToDisplay, options.invertZoom, quality))
-        .then(()=>rimraf(tempDir));
+        .then(() => tileRec(inPath, outPath, zoom, tileSize, tempDir, pattern, zoomToDisplay, options.invertZoom, quality))
+        .then(() => rimraf(tempDir));
 };

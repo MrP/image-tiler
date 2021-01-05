@@ -1,6 +1,6 @@
 /*global jasmine*/
 var fs = require('fs');
-var execSync = require('child_process').execSync;
+var execFileSync = require('child_process').execFileSync;
 var rimraf = require('rimraf');
 var expectImagesToBeTheSame = require('./expectImagesToBeTheSame.helper.js').expectImagesToBeTheSame;
 
@@ -14,10 +14,10 @@ describe('image-tiler cli', function () {
     });
     describe('When used on an image smaller than the tile size', function () {
         it('should output the same image', function (done) {
-            execSync('node bin/image-tiler spec/small.png ' + tempDir + ' small_test_result_{z}_{x}_{y}.png');
+            execFileSync('node', ['bin/image-tiler', 'spec/small.png', tempDir, 'small_test_result_{z}_{x}_{y}.png']);
             expectImagesToBeTheSame(tempDir + '/small_test_result_0_0_0.png', 'spec/expected/small-test.png')
-            .then(done)
-            .catch(done.fail);
+                .then(done)
+                .catch(done.fail);
         });
     });
 
