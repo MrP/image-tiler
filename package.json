@@ -23,13 +23,13 @@
   },
   "homepage": "https://github.com/MrP/image-tiler#readme",
   "devDependencies": {
-    "jasmine": "^3.4.0",
-    "node-image-compare-promise": "^1.0.1",
-    "rimraf": "^2.6.3"
+    "jasmine": "^3.6.3",
+    "node-image-compare-promise": "^1.1.0",
+    "rimraf": "^3.0.2"
   },
   "dependencies": {
-    "image-size": "^0.7.4",
-    "minimist": "^1.2.0",
+    "image-size": "^0.9.3",
+    "minimist": "^1.2.5",
     "mkdirp-promise": "^5.0.1",
     "rimraf-then": "^1.0.1"
   }
