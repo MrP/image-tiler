@@ -29,7 +29,7 @@
   },
   "dependencies": {
     "image-size": "^0.7.4",
-    "minimist": "^1.2.0",
+    "minimist": "^1.2.5",
     "mkdirp-promise": "^5.0.1",
     "rimraf-then": "^1.0.1"
   }
