@@ -1,3 +1,8 @@
 language: node_js
 node_js:
   - "14.15"
+before_install:
+  - sudo apt-get -y install imagemagick
+addons:
+  apt:
+    update: true
