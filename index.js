@@ -1,7 +1,7 @@
 'use strict';
 var execFileSync = require('child_process').execFileSync;
 var sizeOf = require('image-size');
-var mkdirp = require('mkdirp-promise');
+var mkdirp = require('mkdirp')
 var rimraf = require('rimraf-then');
 var fs = require('fs');
 var path = require('path');
